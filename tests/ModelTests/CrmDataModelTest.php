@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\ModelTests;
 
 use App\Model\CrmDataModel;
 use PHPUnit\Framework\TestCase;
-use App\Service\ShowCrmDataService;
 
-class UnitTest extends TestCase
+class CrmDataModelTest extends TestCase
 {
 
     public function testCRMDataModel()
