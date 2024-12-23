@@ -16,6 +16,12 @@ class Bitrix24CrmDataCollector
         $this->entityID = $entityID;
     }
 
+    private function getData(string $dataType)
+    {
+
+
+    }
+
     public function getContactList(): array
     {
         $start = 0;

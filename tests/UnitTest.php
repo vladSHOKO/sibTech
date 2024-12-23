@@ -6,7 +6,7 @@ use App\Model\CrmDataModel;
 use PHPUnit\Framework\TestCase;
 use App\Service\ShowCrmDataService;
 
-class FunctionalTest extends TestCase
+class UnitTest extends TestCase
 {
 
     public function testCRMDataModel()
