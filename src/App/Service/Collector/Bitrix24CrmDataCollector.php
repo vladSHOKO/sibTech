@@ -16,114 +16,61 @@ class Bitrix24CrmDataCollector
         $this->entityID = $entityID;
     }
 
-    public function getContactList(): array
+    private function getData(string $dataType): array
     {
         $start = 0;
         $limit = 50;
 
-        $contactsList = [];
+        $dataList = [];
 
         do {
-            $queryUrl = $this->webHookURL . 'crm.contact.list.json';
+            $queryUrl = $this->webHookURL . 'crm.' . $dataType . '.list.json';
             $queryData = http_build_query([
                 'start' => $start,
                 'limit' => $limit,
+                'entityTypeId' => $this->entityID,
             ]);
 
             $response = file_get_contents($queryUrl . '?' . $queryData);
-            $result = json_decode($response, true);
+            $results = json_decode($response, true);
 
-            foreach ($result['result'] as $contact) {
-                $contactsList[] = $contact;
+            if ($dataType === 'item') {
+                $resultType = $results['result']['items'];
+            } elseif ($dataType === 'category') {
+                $resultType = $results['result']['categories'];
+            } else {
+                $resultType = $results['result'];
             }
+
+            foreach ($resultType as $result) {
+                $dataList[] = $result;
+            }
+
             $start += $limit;
 
-        } while (count($result['result']) === $limit);
+        } while (count($resultType) === $limit);
 
-        return $contactsList;
+        return $dataList;
 
+    }
+
+    public function getContactList(): array
+    {
+        return $this->getData('contact');
     }
 
     public function getDealList(): array
     {
-        $start = 0;
-        $limit = 50;
-
-        $dealsList = [];
-
-        do {
-            $queryUrl = $this->webHookURL . 'crm.deal.list.json';
-            $queryData = http_build_query([
-                'start' => $start,
-                'limit' => $limit,
-            ]);
-
-            $response = file_get_contents($queryUrl . '?' . $queryData);
-            $result = json_decode($response, true);
-
-            foreach ($result['result'] as $deal) {
-                $dealsList[] = $deal;
-            }
-            $start += $limit;
-
-        } while (count($result['result']) === $limit);
-
-        return $dealsList;
+        return $this->getData('deal');
     }
 
     public function getCategoryList(): array
     {
-        $start = 0;
-        $limit = 50;
-
-        $categoryList = [];
-
-        do {
-            $queryUrl = $this->webHookURL . 'crm.category.list.json';
-            $queryData = http_build_query([
-                'start' => $start,
-                'limit' => $limit,
-                'entityTypeId' => $this->entityID
-            ]);
-
-            $response = file_get_contents($queryUrl . '?' . $queryData);
-            $result = json_decode($response, true);
-
-            foreach ($result['result']['categories'] as $category) {
-                $categoryList[] = $category;
-            }
-            $start += $limit;
-
-        } while (count($result['result']['categories']) === $limit);
-
-        return $categoryList;
+        return $this->getData('category');
     }
 
     public function getItemList(): array
     {
-        $start = 0;
-        $limit = 50;
-
-        $itemsList = [];
-
-        do {
-            $queryUrl = $this->webHookURL . 'crm.item.list.json';
-            $queryData = http_build_query([
-                'start' => $start,
-                'limit' => $limit,
-                'entityTypeId' => $this->entityID
-            ]);
-
-            $response = file_get_contents($queryUrl . '?' . $queryData);
-            $result = json_decode($response, true);
-
-            foreach ($result['result']['items'] as $item) {
-                $itemsList[] = $item;
-            }
-            $start += $limit;
-
-        } while (count($result['result']['items']) === $limit);
-
-        return $itemsList;
+        return $this->getData('item');
     }
 }
