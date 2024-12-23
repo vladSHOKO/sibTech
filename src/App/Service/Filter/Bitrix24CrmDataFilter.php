@@ -5,7 +5,7 @@ namespace App\Service\Filter;
 use App\Service\Collector\Bitrix24CrmDataCollector;
 use App\Service\CrmDataFilterInterface;
 
-class Bitrix24CrmDataFilter implements CrmDataFilterInterface
+class Bitrix24CrmDataFilter
 {
     private Bitrix24CrmDataCollector $bitrix24CrmDataCollector;
 

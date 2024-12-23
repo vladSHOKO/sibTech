@@ -4,7 +4,7 @@ namespace App\Service\Collector;
 
 use App\Service\CrmDataCollectorInterface;
 
-class Bitrix24CrmDataCollector implements CrmDataCollectorInterface
+class Bitrix24CrmDataCollector
 {
     private string $webHookURL;
 
